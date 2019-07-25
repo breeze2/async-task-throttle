@@ -5,12 +5,12 @@ export interface IAsyncTaskOptions {
   reject: (reason?: any) => void
 }
 
-export default class AsyncTaskPool<S extends ITask> {
+export default class AsyncTaskThrottle<S extends ITask> {
   public static create<T extends ITask>(task: T, size?: number, max?: number) {
-    const pool = new AsyncTaskPool(task, size, max)
+    const throttle = new AsyncTaskThrottle(task, size, max)
     function asyncTask(...args: any[]) {
       return new Promise((resolve, reject) => {
-        pool.push({
+        throttle.push({
           args,
           reject,
           resolve,
@@ -55,7 +55,7 @@ export default class AsyncTaskPool<S extends ITask> {
       this._queue.push(options)
       this.work()
     } else {
-      options.reject(new Error('The async task pool is full'))
+      options.reject(new Error('It is exceeding load.'))
     }
   }
 

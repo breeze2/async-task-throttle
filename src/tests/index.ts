@@ -1,7 +1,7 @@
 import { spawn, SpawnOptionsWithoutStdio } from 'child_process'
-import AsyncTaskPool from '../index'
+import AsyncTaskThrottle from '../index'
 
-describe('AsyncTaskPool Testing', () => {
+describe('AsyncTaskThrottle Testing', () => {
   function execute(
     command: string,
     args?: string[],
@@ -38,23 +38,23 @@ describe('AsyncTaskPool Testing', () => {
     const times = 100
     const size = 6
     const task = () => execute('node', ['--version'])
-    const poolTask = AsyncTaskPool.create(task, size)
+    const throttleTask = AsyncTaskThrottle.create(task, size)
     const list = Array(times)
       .fill(0)
-      .map(() => poolTask())
+      .map(() => throttleTask())
     const results = await Promise.all(list)
     expect(results.every(result => result === results[0])).toBe(true)
   })
 
-  it('pool is full', async () => {
+  it('exceeding load', async () => {
     const size = 6
     const task = () => execute('node', ['--version'])
-    const poolTask = AsyncTaskPool.create(task, size, -1)
+    const throttleTask = AsyncTaskThrottle.create(task, size, -1)
     try {
-      await poolTask()
+      await throttleTask()
       expect(1).toBe(0)
     } catch (error) {
-      expect(error.message).toBe('The async task pool is full')
+      expect(error.message).toBe('It is exceeding load.')
     }
   })
 
@@ -62,13 +62,13 @@ describe('AsyncTaskPool Testing', () => {
     const times = 24
     const size = 8
     const task = () => sleep(1)
-    const pool = new AsyncTaskPool(task, size)
-    const poolTask = pool.create()
+    const throttle = new AsyncTaskThrottle(task, size)
+    const throttleTask = throttle.create()
     const list = Array(times)
       .fill(0)
-      .map(() => poolTask())
+      .map(() => throttleTask())
     const timeId = setInterval(() => {
-      const count = pool.getWorkingCount()
+      const count = throttle.getWorkingCount()
       if (count === 0) {
         clearInterval(timeId)
       } else {
@@ -94,9 +94,9 @@ describe('AsyncTaskPool Testing', () => {
           return reject()
         }
       })
-    const poolTask = AsyncTaskPool.create(task)
+    const throttleTask = AsyncTaskThrottle.create(task)
     for (let i = 0; i < times; i++) {
-      await poolTask()
+      await throttleTask()
         .then(() => successCount++)
         .catch(() => failCount++)
     }
