@@ -1,6 +1,6 @@
 {
-  "name": "async-task-pool",
-  "version": "0.9.0",
+  "name": "async-task-throttle",
+  "version": "0.9.1",
   "keywords": [
     "async",
     "task",
@@ -8,7 +8,7 @@
     "queue",
     "promise"
   ],
-  "description": "A simple async task pool.",
+  "description": "A simple async task throttle.",
   "private": false,
   "author": {
     "email": "805511939@qq.com",
