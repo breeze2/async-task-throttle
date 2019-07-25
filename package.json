@@ -1,0 +1,53 @@
+{
+  "name": "async-task-pool",
+  "version": "0.0.1",
+  "keywords": [
+    "async",
+    "task",
+    "pool",
+    "queue",
+    "promise"
+  ],
+  "description": "A simple async task pool.",
+  "private": false,
+  "author": {
+    "email": "805511939@qq.com",
+    "name": "breezelin",
+    "url": "https://github.com/breeze2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/breeze2/async-task-pool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/breeze2/async-task-pool/issues"
+  },
+  "homepage": "https://github.com/breeze2/async-task-pool",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "start": "tsc -w",
+    "build": "tsc",
+    "test": "jest --config jestconfig.json",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test",
+    "preversion": "yarn lint"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.5.3"
+  }
+}
