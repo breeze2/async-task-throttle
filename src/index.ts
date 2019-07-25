@@ -6,7 +6,7 @@ export interface IAsyncTaskOptions {
 }
 
 export default class AsyncTaskPool<S extends ITask> {
-  public static create<T extends ITask>(task: T, size?: number, max?: number): T {
+  public static create<T extends ITask>(task: T, size?: number, max?: number) {
     const pool = new AsyncTaskPool(task, size, max)
     function asyncTask(...args: any[]) {
       return new Promise((resolve, reject) => {
@@ -63,15 +63,18 @@ export default class AsyncTaskPool<S extends ITask> {
     if (this._workingCount < this._workerCount) {
       const options = this._queue.shift()
       if (options) {
-        this._workingCount ++
-        this._task(...(options.args)).then(value => {
-          options.resolve(value)
-        }).catch(error => {
-          options.reject(error)
-        }).then(() => {
-          this._workingCount --
-          this.work()
-        })
+        this._workingCount++
+        this._task(...options.args)
+          .then(value => {
+            options.resolve(value)
+          })
+          .catch(error => {
+            options.reject(error)
+          })
+          .then(() => {
+            this._workingCount--
+            this.work()
+          })
       }
     }
   }
