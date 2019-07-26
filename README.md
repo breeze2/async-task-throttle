@@ -25,7 +25,8 @@ function task (url) {
 
 const throttleTask = AsyncTaskThrottle.create(task, 6, 100)
 
-// use throttleTask like task
+// use `throttleTask` just like `task`
+// but up to 6 tasks are running at the same moment
 throttleTask('https://github.com/breeze2/markdown-it-all').then(value => {
     console.log(value)
 }).catch(error => {
@@ -33,3 +34,21 @@ throttleTask('https://github.com/breeze2/markdown-it-all').then(value => {
 })
 
 ```
+
+### Interface
+
+#### AsyncTaskThrottle.create
+
+```js
+function AsyncTaskThrottle.create(
+    task: T extends (...args: any[]) => Promise<any>,
+    size?: number = 6,
+    max: number = Infinity
+): T
+
+```
+
+* task: the async task function.
+* size: defualt 6, at the same moment, up to `size` tasks are runing, others are in the waiting queue.
+* max: defualt Infinity, when the length of waiting queue is greater than `max`, late tasks will be rejected instantly.
+
